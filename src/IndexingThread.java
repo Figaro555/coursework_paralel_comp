@@ -9,14 +9,14 @@ import java.util.stream.Stream;
 
 public class IndexingThread extends  Thread{
 
-final File SOURCE_ROOT_FILE = new File("./FilesToIndex");
+final File SOURCE_ROOT_FILE = new File("C:\\Users\\Nicolay\\Desktop\\IASA\\3 course\\2 semestr\\Paralel\\Coursework\\src\\FilesToIndex");
 
 private int startPosition = 0;
 private int endPosition = 0;
-private HashMap<String, LinkedList<Integer>> indexDictionary;
+private Map<String, List<Integer>> indexDictionary;
 
 
-public IndexingThread(HashMap<String, LinkedList<Integer>>indexDictionary, int startPosition, int endPosition){
+public IndexingThread(Map<String, List<Integer>>indexDictionary, int startPosition, int endPosition){
     this.indexDictionary = indexDictionary;
     this.startPosition = startPosition;
     this.endPosition = endPosition;
@@ -33,7 +33,6 @@ public IndexingThread(HashMap<String, LinkedList<Integer>>indexDictionary, int s
 
 
         while (line != null) {
-            System.out.println(line);
 
 
             List<String> collection = Stream.of(line.split("[^A-Za-z]+"))
@@ -44,17 +43,31 @@ public IndexingThread(HashMap<String, LinkedList<Integer>>indexDictionary, int s
 
             terms.addAll(collection);
         }
-        return new ArrayList<>(terms);
+        return new ArrayList<String>(terms);
     }
 
     @Override
     public void run(){
         for (int i = startPosition; i < endPosition; i++) {
+            List<String> uniqueTerms;
             try {
-                fileTermsList(new File(SOURCE_ROOT_FILE.list()[i]));
+                uniqueTerms = fileTermsList(new File(SOURCE_ROOT_FILE + "\\" +  SOURCE_ROOT_FILE.list()[i]));
             } catch (IOException e) {
                 e.printStackTrace();
+                return;
             }
+            for (int j = 0; j < uniqueTerms.size(); j++) {
+                String word = uniqueTerms.get(j);
+                if(!indexDictionary.containsKey(word)){
+                    indexDictionary.put(word,new LinkedList<Integer>());
+                    indexDictionary.get(word).add(i);
+
+                }else{
+                    indexDictionary.get(word).add(i);
+                }
+
+            }
+
         }
 
     }
