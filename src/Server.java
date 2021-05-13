@@ -1,52 +1,30 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Stream;
 //import java.util.HashMap;
 
 public class Server {
-static int THREAD_AMOUNT = 1;
+static int THREAD_AMOUNT = 3;
+static final File SOURCE_ROOT_FILE = new File("C:\\Users\\Nicolay\\Desktop\\IASA\\3 course\\2 semestr\\Paralel\\Coursework\\src\\FilesToIndex");
+static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
 
 
 
-    static private ArrayList<String> fileTermsList(File file) throws IOException {
+    private static int[] startEndGenerate(int arrLength, int parts, int currentIndex){
+        int[] result = new int[2];
+        result[0] = Math.round(((float)arrLength)/parts*currentIndex);
+        result[1] = Math.round(((float)arrLength)/parts*(currentIndex+1));
 
-        FileReader fileReader = new FileReader(file);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String line = bufferedReader.readLine();
-        SortedSet<String> terms = new TreeSet<>();
-
-
-        while (line != null) {
-            System.out.println(line);
-
-
-            Stream.of(line.split("[^A-Za-z]+"))
-                    .map(String::toLowerCase)
-                    .forEach( s->{
-                        terms.add(s);
-                    });
-
-            line = bufferedReader.readLine();
-
-        }
-        return new ArrayList<>(terms);
+        return result;
     }
 
+    public static void main(String[] args) {
 
 
-    public static void main(String[] args) throws IOException {
-        File sourceRootFile = new File("./FilesToIndex");
+        IndexingThread[] threadArray = new IndexingThread[THREAD_AMOUNT];
+        Map<String, List<Integer>>[] dictionaries = new HashMap[THREAD_AMOUNT];
 
+        int[] startEndIndexes = startEndGenerate(FILES_AMOUNT,THREAD_AMOUNT, 1);
 
-        ArrayList arr = fileTermsList(new File("./FilesToIndex/testNeg5500_3.txt"));
-        //Stream.of(arr).forEach(s-> System.out.println(s+"\t"));
-        System.out.println(sourceRootFile.list().length);
-
-        for (String name : sourceRootFile.list()) {
-            System.out.println(name);
-        }
     }
 }
