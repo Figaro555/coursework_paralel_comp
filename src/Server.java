@@ -23,8 +23,20 @@ static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
 
         IndexingThread[] threadArray = new IndexingThread[THREAD_AMOUNT];
         Map<String, List<Integer>>[] dictionaries = new HashMap[THREAD_AMOUNT];
+        for (int i = 0; i < THREAD_AMOUNT; i++) {
+            dictionaries[i] = new HashMap<>();
+            int[] startEndIndexes = startEndGenerate(FILES_AMOUNT,THREAD_AMOUNT, i);
+            threadArray[i] = new IndexingThread(dictionaries[i],startEndIndexes[0],startEndIndexes[1]);
+            threadArray[i].start();
+        }
+        Stream.of(threadArray).forEach((IndexingThread thread)->{
+            try{
+                thread.join();
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        });
 
-        int[] startEndIndexes = startEndGenerate(FILES_AMOUNT,THREAD_AMOUNT, 1);
 
     }
 }
