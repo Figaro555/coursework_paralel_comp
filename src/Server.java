@@ -18,12 +18,33 @@ static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
         return result;
     }
 
+    private static Map<String,LinkedList<Integer>> mergeHashMaps(HashMap<String,LinkedList<Integer>>[] hashMaps){
+        HashMap<String,LinkedList<Integer>> finalHashMap = new HashMap<String, LinkedList<Integer>>();
+        finalHashMap = (HashMap)hashMaps[0].clone();
 
+
+        for (int i = 1; i< hashMaps.length;i++) {
+            for (String word :hashMaps[i].keySet()) {
+
+                if(!finalHashMap.containsKey(word)){
+                    finalHashMap.put(word, new LinkedList<Integer>());
+                }
+
+                for (int j = 0; j < hashMaps[i].get(word).size(); j++) {
+                    finalHashMap.get(word).add(hashMaps[i].get(word).get(j));
+                }
+
+            }
+
+        }
+        TreeMap<String, LinkedList<Integer>> finalSortedMap = new TreeMap<>(finalHashMap);
+        return finalSortedMap;
+    }
 
     public static void main(String[] args) {
 
         IndexingThread[] threadArray = new IndexingThread[THREAD_AMOUNT];
-        Map<String, List<Integer>>[] dictionaries = new HashMap[THREAD_AMOUNT];
+        HashMap<String, LinkedList<Integer>>[] dictionaries = new HashMap[THREAD_AMOUNT];
 
 
         for (int i = 0; i < THREAD_AMOUNT; i++) {
@@ -39,7 +60,7 @@ static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
                 e.printStackTrace();
             }
         });
-
+        Map indexMap = mergeHashMaps(dictionaries);
 
     }
 }

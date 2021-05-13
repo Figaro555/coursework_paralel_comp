@@ -13,10 +13,10 @@ final File SOURCE_ROOT_FILE = new File("C:\\Users\\Nicolay\\Desktop\\IASA\\3 cou
 
 private int startPosition = 0;
 private int endPosition = 0;
-private Map<String, List<Integer>> indexDictionary;
+private Map<String, LinkedList<Integer>> indexDictionary;
 
 
-public IndexingThread(Map<String, List<Integer>>indexDictionary, int startPosition, int endPosition){
+public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int startPosition, int endPosition){
     this.indexDictionary = indexDictionary;
     this.startPosition = startPosition;
     this.endPosition = endPosition;
