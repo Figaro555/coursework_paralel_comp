@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 //import java.util.HashMap;
 
 public class Server {
-static int THREAD_AMOUNT = 5;
+static int THREAD_AMOUNT = 2;
 static final File SOURCE_ROOT_FILE = new File("C:\\Users\\Nicolay\\Desktop\\IASA\\3 course\\2 semestr\\Paralel\\Coursework\\src\\FilesToIndex");
 static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
 
@@ -18,7 +18,9 @@ static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
         return result;
     }
 
+
     private static Map<String,LinkedList<Integer>> mergeHashMaps(HashMap<String,LinkedList<Integer>>[] hashMaps){
+
         HashMap<String,LinkedList<Integer>> finalHashMap = new HashMap<String, LinkedList<Integer>>();
         finalHashMap = (HashMap)hashMaps[0].clone();
 
@@ -38,11 +40,10 @@ static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
 
         }
         TreeMap<String, LinkedList<Integer>> finalSortedMap = new TreeMap<>(finalHashMap);
+
         return finalSortedMap;
     }
-
-    public static void main(String[] args) {
-
+    static Map<String,LinkedList<Integer>> createIndex(){
         IndexingThread[] threadArray = new IndexingThread[THREAD_AMOUNT];
         HashMap<String, LinkedList<Integer>>[] dictionaries = new HashMap[THREAD_AMOUNT];
 
@@ -60,7 +61,21 @@ static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
                 e.printStackTrace();
             }
         });
-        Map indexMap = mergeHashMaps(dictionaries);
 
+        return mergeHashMaps(dictionaries);
+    }
+
+    public static void main(String[] args) {
+        long startTime = System.nanoTime();
+        Map<String,LinkedList<Integer>> index = createIndex();
+
+        long endTime = System.nanoTime();
+        System.out.println((((float)(endTime - startTime))/1000000));
+
+        List res = index.get("writer");
+        for (int i = 0; i < res.size(); i++) {
+            //System.out.println(SOURCE_ROOT_FILE.list()[(int)res.get(i)]);
+        }
+        System.out.println();
     }
 }

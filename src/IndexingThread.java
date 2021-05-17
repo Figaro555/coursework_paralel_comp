@@ -24,51 +24,58 @@ public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int start
 
 }
 
-    static private ArrayList<String> fileTermsList(File file) throws IOException {
+    static private List<String> fileTermsList(File file) throws IOException {
 
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String line = bufferedReader.readLine();
-        SortedSet<String> terms = new TreeSet<>();
+        List<String> terms = null;
 
 
         while (line != null) {
 
 
-            List<String> collection = Stream.of(line.split("[^A-Za-z]+"))
+            terms = Stream.of(line.split("[^A-Za-z]+"))
                     .map(String::toLowerCase)
                     .collect(Collectors.toList());
 
             line = bufferedReader.readLine();
 
-            terms.addAll(collection);
         }
-        return new ArrayList<String>(terms);
+        return terms;
     }
 
     @Override
     public void run(){
-        for (int i = startPosition; i < endPosition; i++) {
+        long t = 0;
+        for (int docId = startPosition; docId < endPosition; docId++) {
             List<String> uniqueTerms;
+            long startTime = System.nanoTime();
+
+
+
             try {
-                uniqueTerms = fileTermsList(new File(SOURCE_ROOT_FILE + "\\" +  SOURCE_ROOT_FILE.list()[i]));
+                uniqueTerms = fileTermsList(new File(SOURCE_ROOT_FILE + "\\" +  SOURCE_ROOT_FILE.list()[docId]));
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
+            long endTime = System.nanoTime();
+            t+=(((float)(endTime - startTime))/1000000);
             for (int j = 0; j < uniqueTerms.size(); j++) {
                 String word = uniqueTerms.get(j);
                 if(!indexDictionary.containsKey(word)){
                     indexDictionary.put(word,new LinkedList<Integer>());
-                    indexDictionary.get(word).add(i);
+                    indexDictionary.get(word).add(docId);
 
                 }else{
-                    indexDictionary.get(word).add(i);
+                    indexDictionary.get(word).add(docId);
                 }
 
             }
 
         }
 
+        System.out.println(t);
     }
 }
