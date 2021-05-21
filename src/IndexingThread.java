@@ -50,8 +50,11 @@ public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int start
 
     @Override
     public void run(){
+
         long t = 0;
+
         for (int docId = startPosition; docId < endPosition; docId++) {
+
             List<String> uniqueTerms;
 
             long startTime = System.nanoTime();
@@ -68,13 +71,11 @@ public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int start
 
             for (int j = 0; j < uniqueTerms.size(); j++) {
                 String word = uniqueTerms.get(j);
-                if(!indexDictionary.containsKey(word)){
-                    indexDictionary.put(word,new LinkedList<Integer>());
-                    indexDictionary.get(word).add(docId);
-
-                }else{
-                    indexDictionary.get(word).add(docId);
+                if(!indexDictionary.containsKey(word)) {
+                    indexDictionary.put(word, new LinkedList<Integer>());
                 }
+
+                indexDictionary.get(word).add(docId);
 
             }
 

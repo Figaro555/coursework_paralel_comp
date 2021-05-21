@@ -93,7 +93,7 @@ static final int PORT = 8000;
         try{
             while (true){
                 Socket socket = server.accept();
-                ServerThread serverThread = new ServerThread(index,socket);
+                ServerThread serverThread = new ServerThread(index, socket, SOURCE_ROOT_FILE);
                 list.add(serverThread);
                 serverThread.start();
 
