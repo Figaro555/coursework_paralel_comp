@@ -28,16 +28,19 @@ public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int start
 
         FileReader fileReader = new FileReader(file);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
+
         String line = bufferedReader.readLine();
-        List<String> terms = null;
+
+        List<String> terms = new ArrayList<>();
 
 
         while (line != null) {
 
-
-            terms = Stream.of(line.split("[^A-Za-z]+"))
+            List<String> collect = Stream.of(line.split("[^A-Za-z]+"))
                     .map(String::toLowerCase)
                     .collect(Collectors.toList());
+
+            terms.addAll(collect);
 
             line = bufferedReader.readLine();
 
@@ -50,9 +53,8 @@ public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int start
         long t = 0;
         for (int docId = startPosition; docId < endPosition; docId++) {
             List<String> uniqueTerms;
+
             long startTime = System.nanoTime();
-
-
 
             try {
                 uniqueTerms = fileTermsList(new File(SOURCE_ROOT_FILE + "\\" +  SOURCE_ROOT_FILE.list()[docId]));
@@ -60,8 +62,10 @@ public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int start
                 e.printStackTrace();
                 return;
             }
+
             long endTime = System.nanoTime();
             t+=(((float)(endTime - startTime))/1000000);
+
             for (int j = 0; j < uniqueTerms.size(); j++) {
                 String word = uniqueTerms.get(j);
                 if(!indexDictionary.containsKey(word)){

@@ -1,13 +1,14 @@
 import java.io.*;
 import java.util.*;
 import java.util.stream.Stream;
-//import java.util.HashMap;
+
 
 public class Server {
-static int THREAD_AMOUNT = 2;
+
+static int THREAD_AMOUNT = 1;
 static final File SOURCE_ROOT_FILE = new File("C:\\Users\\Nicolay\\Desktop\\IASA\\3 course\\2 semestr\\Paralel\\Coursework\\src\\FilesToIndex");
 static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
-
+static final int port = 8000;
 
 
     private static int[] startEndGenerate(int arrLength, int parts, int currentIndex){
@@ -19,21 +20,21 @@ static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
     }
 
 
-    private static Map<String,LinkedList<Integer>> mergeHashMaps(HashMap<String,LinkedList<Integer>>[] hashMaps){
+    private static Map<String,LinkedList<Integer>> mergeHashMaps(HashMap<String,LinkedList<Integer>>[] hashMapsToMerge){
 
-        HashMap<String,LinkedList<Integer>> finalHashMap = new HashMap<String, LinkedList<Integer>>();
-        finalHashMap = (HashMap)hashMaps[0].clone();
+        Map<String,LinkedList<Integer>> finalHashMap;
+        finalHashMap = (HashMap)hashMapsToMerge[0].clone();
 
 
-        for (int i = 1; i< hashMaps.length;i++) {
-            for (String word :hashMaps[i].keySet()) {
+        for (int i = 1; i< hashMapsToMerge.length;i++) {
+            for (String word :hashMapsToMerge[i].keySet()) {
 
                 if(!finalHashMap.containsKey(word)){
                     finalHashMap.put(word, new LinkedList<Integer>());
                 }
 
-                for (int j = 0; j < hashMaps[i].get(word).size(); j++) {
-                    finalHashMap.get(word).add(hashMaps[i].get(word).get(j));
+                for (int j = 0; j < hashMapsToMerge[i].get(word).size(); j++) {
+                    finalHashMap.get(word).add(hashMapsToMerge[i].get(word).get(j));
                 }
 
             }
@@ -43,6 +44,8 @@ static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
 
         return finalSortedMap;
     }
+
+
     static Map<String,LinkedList<Integer>> createIndex(){
         IndexingThread[] threadArray = new IndexingThread[THREAD_AMOUNT];
         HashMap<String, LinkedList<Integer>>[] dictionaries = new HashMap[THREAD_AMOUNT];
@@ -65,17 +68,22 @@ static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
         return mergeHashMaps(dictionaries);
     }
 
+
     public static void main(String[] args) {
+
+
         long startTime = System.nanoTime();
+
         Map<String,LinkedList<Integer>> index = createIndex();
 
         long endTime = System.nanoTime();
         System.out.println((((float)(endTime - startTime))/1000000));
 
-        List res = index.get("writer");
-        for (int i = 0; i < res.size(); i++) {
-            //System.out.println(SOURCE_ROOT_FILE.list()[(int)res.get(i)]);
-        }
-        System.out.println();
+
+
+
+
+
+
     }
 }
