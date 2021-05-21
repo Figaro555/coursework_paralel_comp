@@ -1,4 +1,6 @@
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -8,7 +10,7 @@ public class Server {
 static int THREAD_AMOUNT = 1;
 static final File SOURCE_ROOT_FILE = new File("C:\\Users\\Nicolay\\Desktop\\IASA\\3 course\\2 semestr\\Paralel\\Coursework\\src\\FilesToIndex");
 static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
-static final int port = 8000;
+static final int PORT = 8000;
 
 
     private static int[] startEndGenerate(int arrLength, int parts, int currentIndex){
@@ -69,7 +71,7 @@ static final int port = 8000;
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
 
         long startTime = System.nanoTime();
@@ -79,10 +81,26 @@ static final int port = 8000;
         long endTime = System.nanoTime();
         System.out.println((((float)(endTime - startTime))/1000000));
 
+        LinkedList<ServerThread> list = new LinkedList<>();
+        ServerSocket server = null;
 
+        try {
+            server = new ServerSocket(PORT);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        try{
+            while (true){
+                Socket socket = server.accept();
+                ServerThread serverThread = new ServerThread(index,socket);
+                list.add(serverThread);
+                serverThread.start();
 
-
-
+            }
+        }finally {
+            server.close();
+        }
 
 
     }
