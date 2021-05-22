@@ -26,7 +26,7 @@ public class Client {
 }
 
 
-class MassageGetter extends Thread{
+class MassageGetter extends Thread {
     private BufferedReader in;
     public MassageGetter(Socket socket) {
         try {
@@ -36,8 +36,8 @@ class MassageGetter extends Thread{
         }
     }
     @Override
-    public void run(){
-        while (true){
+    public void run() {
+        while (true) {
             String request;
             try {
                 request = in.readLine();
@@ -53,7 +53,7 @@ class MassageGetter extends Thread{
 }
 
 
-class MassageSender extends Thread{
+class MassageSender extends Thread {
     private BufferedReader inputUser;
     private BufferedWriter out;
 
@@ -65,14 +65,11 @@ class MassageSender extends Thread{
         }
     }
     @Override
-    public void run(){
-        while (true){
+    public void run() {
+        while (true) {
             String clientRequest;
             try {
                 clientRequest = inputUser.readLine();
-                //зчитуємо з консолі
-                if(clientRequest.equals("N")) break;
-                //та відправляємо
                 out.write(clientRequest+"\n");
                 out.flush();
             } catch (IOException e) {

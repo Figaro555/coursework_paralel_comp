@@ -31,7 +31,7 @@ static final int PORT = 8000;
         for (int i = 1; i< hashMapsToMerge.length;i++) {
             for (String word :hashMapsToMerge[i].keySet()) {
 
-                if(!finalHashMap.containsKey(word)){
+                if(!finalHashMap.containsKey(word)) {
                     finalHashMap.put(word, new LinkedList<Integer>());
                 }
 
@@ -48,7 +48,7 @@ static final int PORT = 8000;
     }
 
 
-    static Map<String,LinkedList<Integer>> createIndex(){
+    static Map<String,LinkedList<Integer>> createIndex() {
         IndexingThread[] threadArray = new IndexingThread[THREAD_AMOUNT];
         HashMap<String, LinkedList<Integer>>[] dictionaries = new HashMap[THREAD_AMOUNT];
 
@@ -60,9 +60,9 @@ static final int PORT = 8000;
             threadArray[i].start();
         }
         Stream.of(threadArray).forEach((IndexingThread thread)->{
-            try{
+            try {
                 thread.join();
-            }catch (InterruptedException e){
+            }catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
@@ -73,13 +73,7 @@ static final int PORT = 8000;
 
     public static void main(String[] args) throws IOException {
 
-
-        long startTime = System.nanoTime();
-
         Map<String,LinkedList<Integer>> index = createIndex();
-
-        long endTime = System.nanoTime();
-        System.out.println((((float)(endTime - startTime))/1000000));
 
         LinkedList<ServerThread> list = new LinkedList<>();
         ServerSocket server = null;
@@ -91,7 +85,7 @@ static final int PORT = 8000;
             return;
         }
         try{
-            while (true){
+            while (true) {
                 Socket socket = server.accept();
                 ServerThread serverThread = new ServerThread(index, socket, SOURCE_ROOT_FILE);
                 list.add(serverThread);

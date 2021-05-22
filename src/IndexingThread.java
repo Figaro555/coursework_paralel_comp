@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class IndexingThread extends  Thread{
+public class IndexingThread extends  Thread {
 
 final File SOURCE_ROOT_FILE = new File("C:\\Users\\Nicolay\\Desktop\\IASA\\3 course\\2 semestr\\Paralel\\Coursework\\src\\FilesToIndex");
 
@@ -16,7 +16,7 @@ private int endPosition = 0;
 private Map<String, LinkedList<Integer>> indexDictionary;
 
 
-public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int startPosition, int endPosition){
+public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int startPosition, int endPosition) {
     this.indexDictionary = indexDictionary;
     this.startPosition = startPosition;
     this.endPosition = endPosition;
@@ -49,15 +49,11 @@ public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int start
     }
 
     @Override
-    public void run(){
-
-        long t = 0;
+    public void run() {
 
         for (int docId = startPosition; docId < endPosition; docId++) {
 
             List<String> uniqueTerms;
-
-            long startTime = System.nanoTime();
 
             try {
                 uniqueTerms = fileTermsList(new File(SOURCE_ROOT_FILE + "\\" +  SOURCE_ROOT_FILE.list()[docId]));
@@ -66,11 +62,10 @@ public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int start
                 return;
             }
 
-            long endTime = System.nanoTime();
-            t+=(((float)(endTime - startTime))/1000000);
 
             for (int j = 0; j < uniqueTerms.size(); j++) {
                 String word = uniqueTerms.get(j);
+
                 if(!indexDictionary.containsKey(word)) {
                     indexDictionary.put(word, new LinkedList<Integer>());
                 }
@@ -81,6 +76,5 @@ public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int start
 
         }
 
-        System.out.println(t);
     }
 }

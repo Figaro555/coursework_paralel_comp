@@ -20,8 +20,8 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
-        try{
-            while(true){
+        try {
+            while(true) {
                 String request;
 
                 out.write("What word would you like to find?\n");
@@ -29,7 +29,7 @@ public class ServerThread extends Thread {
 
                 request =in.readLine();
 
-                if(!index.containsKey(request)){
+                if(!index.containsKey(request)) {
                     out.write("There's no such word " + request + "\n");
                     out.flush();
                     continue;
@@ -42,7 +42,7 @@ public class ServerThread extends Thread {
                 out.flush();
 
             }
-        }catch(IOException e){}
+        }catch(IOException e) {}
 
     }
 }
