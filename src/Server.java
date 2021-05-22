@@ -7,13 +7,13 @@ import java.util.stream.Stream;
 
 public class Server {
 
-static int THREAD_AMOUNT = 1;
+static final int THREAD_AMOUNT = 1;
 static final File SOURCE_ROOT_FILE = new File("C:\\Users\\Nicolay\\Desktop\\IASA\\3 course\\2 semestr\\Paralel\\Coursework\\src\\FilesToIndex");
 static final int FILES_AMOUNT = SOURCE_ROOT_FILE.list().length;
 static final int PORT = 8000;
 
 
-    private static int[] startEndGenerate(int arrLength, int parts, int currentIndex){
+    private static int[] startEndGenerate(int arrLength, int parts, int currentIndex) {
         int[] result = new int[2];
         result[0] = Math.round(((float)arrLength)/parts*currentIndex);
         result[1] = Math.round(((float)arrLength)/parts*(currentIndex+1));
@@ -56,7 +56,7 @@ static final int PORT = 8000;
         for (int i = 0; i < THREAD_AMOUNT; i++) {
             dictionaries[i] = new HashMap<>();
             int[] startEndIndexes = startEndGenerate(FILES_AMOUNT,THREAD_AMOUNT, i);
-            threadArray[i] = new IndexingThread(dictionaries[i],startEndIndexes[0],startEndIndexes[1]);
+            threadArray[i] = new IndexingThread(dictionaries[i],startEndIndexes[0],startEndIndexes[1], SOURCE_ROOT_FILE);
             threadArray[i].start();
         }
         Stream.of(threadArray).forEach((IndexingThread thread)->{

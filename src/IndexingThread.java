@@ -9,18 +9,17 @@ import java.util.stream.Stream;
 
 public class IndexingThread extends  Thread {
 
-final File SOURCE_ROOT_FILE = new File("C:\\Users\\Nicolay\\Desktop\\IASA\\3 course\\2 semestr\\Paralel\\Coursework\\src\\FilesToIndex");
-
+private File SOURCE_ROOT_FILE;
 private int startPosition = 0;
 private int endPosition = 0;
 private Map<String, LinkedList<Integer>> indexDictionary;
 
 
-public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int startPosition, int endPosition) {
+public IndexingThread(Map<String, LinkedList<Integer>>indexDictionary, int startPosition, int endPosition, File SOURCE_ROOT_FILE) {
     this.indexDictionary = indexDictionary;
     this.startPosition = startPosition;
     this.endPosition = endPosition;
-
+    this.SOURCE_ROOT_FILE = SOURCE_ROOT_FILE;
 
 }
 
