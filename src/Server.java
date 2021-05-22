@@ -42,9 +42,12 @@ static final int PORT = 8000;
             }
 
         }
-        TreeMap<String, LinkedList<Integer>> finalSortedMap = new TreeMap<>(finalHashMap);
 
-        return finalSortedMap;
+        for (String term: finalHashMap.keySet()) {
+            Collections.sort(finalHashMap.get(term));
+        }
+
+        return new TreeMap<>(finalHashMap);
     }
 
 
